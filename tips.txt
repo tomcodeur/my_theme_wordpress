@@ -29,3 +29,11 @@
 
         1 - On se rend dans le pannel Admin, Réglages -> Permaliens
         2 - On clique simplement sur le bouton Enregistrer les modifications
+
+*       Pour mettre une icone personnalisé à une nouvelle section custom post type, il faut:
+
+        1 - Se rendre sur le site https://developer.wordpress.org/resource/dashicons
+            afin de récupérer un icon qui correspond à notre options.
+        
+        2 - Et l'ajouter dans aux options de la function register_post_type(),
+            Ex: 'menu_icon' => 'dashicons-book',

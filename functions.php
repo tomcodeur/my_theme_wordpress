@@ -122,6 +122,18 @@ function montheme_init() {
         'hierarchical' => true, // True = Checkbox
         'show_admin_column' => true,
     ]);
+
+    // Ajout d'une nouvelle option dans le panel d'aministration de Wordpress
+
+    register_post_type('mescours', [
+        'label' => 'Mes cours',
+        'public' => true,
+        'menu_position' => 4,
+        'menu_icon' => 'dashicons-book',
+        'supports' => ['title', 'editor', 'thumbnail'],
+        'show_in_rest' => true,
+        'has_archive' => true,
+    ]);
 }
 
 add_action('init', 'montheme_init');
@@ -141,6 +153,11 @@ add_filter('document_title_separator', 'montheme_title_separator');
 
 add_filter('nav_menu_class', 'montheme_menu_class');
 add_filter('nav_menu_link_attributes', 'montheme_menu_link_class');
+
+// Ajout d'une option dans la partie Réglage du panel admin de Wordpress
+
+require_once('options/ecole.php');
+EcoleMenuPage::register();
 
 // Appel la classe SponsoMetaBox avec le chemin d'accès au fichier
 
