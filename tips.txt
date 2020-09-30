@@ -1,0 +1,31 @@
+*       Pour connaître la bonne fonction à utilser, il faut se rendre sur:
+
+        1 - https://wordpress.org/support/
+        2 - Partie documentation
+        3 - Rechercher la fonction qui nous intéresse
+
+
+*       Pour mettre en forme rapidement du texte, il faut faire:
+
+        1 - CRTL + SHIFT + P
+        2 - Rechercher: Mettre en forme le document avec ...
+        3 - Mettre en forme avec PHP Intelephense
+
+
+*       Pour regénérer les formats d'image après que nous avons défini une nouvelle taille, il faut :
+
+        1 - Télécharger l'extension wordpress "Regenerate Thumbnails"
+        2 - Cocher la deuxième option et décocher la première
+        3 - Cliquer sur le premier bouton "Régénérer les miniatures ..."
+
+*       (fichier functions.php)
+        Pour voir le debug de cette fonction, function montheme_save_sponso($post_id) {
+        if(array_key_exists('montheme_sponso', $_POST)) {}} , il faut:
+
+        1 - Inspecter l'élément "Network", "XHR" et rafraichir car c'est une requête AJAX.
+        2 - Résultat: post.php?post= etc ...
+
+*       Pour afficher une taxonomy après sa création, il faut rafraichir les permaliens :
+
+        1 - On se rend dans le pannel Admin, Réglages -> Permaliens
+        2 - On clique simplement sur le bouton Enregistrer les modifications
