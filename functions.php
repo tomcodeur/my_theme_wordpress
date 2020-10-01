@@ -163,3 +163,83 @@ EcoleMenuPage::register();
 
 require_once('metaboxes/sponso.php');
 SponsoMetaBox::register();
+
+// Modifier les colonnes pour notre option "Mes cours"
+
+add_filter('manage_mescours_posts_columns', function ($columns) {
+
+    return [
+
+        'cb' => $columns['cb'],
+        'thumbnail' => 'Miniature',
+        'title' => $columns['title'],
+        'date' => $columns['date'],
+    ];
+
+});
+
+// Ajout d'une image dans la colonne Miniature
+
+add_filter('manage_mescours_posts_custom_column', function($column, $postId) {
+
+    if($column === 'thumbnail') {
+        the_post_thumbnail('thumbnail', $postId);
+    }
+
+}, 10, 2);
+
+// Modification de la classe Miniature afin de réduire la taille de la colonne
+
+add_action('admin_enqueue_scripts', function() {
+
+    wp_enqueue_style('admin_montheme', get_template_directory_uri() . '/assets/admin.css');
+
+});
+
+// Ajout d'une nouvelle catégorie au sein des autres colonnes dans l'option Article
+
+add_filter('manage_post_posts_columns', function ($columns) {
+
+    // Nouveau tableau
+
+    $newColumns = [];
+
+    // On récupère la clé et la valeur
+
+    foreach($columns as $k => $v) {
+
+        if($k === 'date') {
+
+            $newColumns['sponso'] = 'Article abonnés ?';
+
+        }
+
+        $newColumns[$k] = $v;
+
+    }
+    
+    return $newColumns;
+
+});
+
+// Ajout d'un style particulier pour la colonne article sponsorisé
+
+add_filter('manage_post_posts_custom_column', function($column, $postId) {
+
+    if($column === 'sponso') {
+
+        if(!empty(get_post_meta($postId, SponsoMetaBox::META_KEY, true)))  {
+
+            $class = 'yes';
+
+        } else {
+
+            $class = 'no';
+
+        }
+
+        echo '<div class="bullet bullet-' . $class . '"></div>';
+
+    }
+
+}, 10, 2);
