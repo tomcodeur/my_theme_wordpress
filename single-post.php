@@ -21,6 +21,62 @@
 
         <?php the_content() ?>
 
+        <!-- Récupération des articles en lien avec l'article en cours (avec tri) -->
+
+            <h2>Articles relatifs</h2>
+
+            <div class="row">
+
+            <?php
+
+                $formation = array_map(function ($term) {
+                    
+                    return $term->term_id;
+
+                }, get_the_terms(get_post(), 'formation'));
+
+                $query = new WP_Query([
+
+                    'post__not_in' => [get_the_ID()],
+                    'post_type' => 'post',
+                    'posts_per_page' => 3,
+                    'orderby' => 'rand',
+                    'tax_query' => [
+
+                        [
+                            'taxonomy' => 'formation',
+                            'terms' => $formation,
+                        ]
+
+                    ],
+
+                    // Selectionner uniquemen les articles sponsorisé
+
+                    // 'meta_query' => [
+
+                    //     [
+                    //         'key' => SponsoMetaBox::META_KEY,
+                    //         'compare' => 'EXISTS',
+                    //     ]
+
+                    // ]
+                    
+                ]);
+
+                while($query->have_posts()): $query->the_post();
+
+                ?>
+
+                    <div class="col-sm-4">
+
+                        <?php get_template_part('parts/card', 'post'); ?>
+
+                    </div>
+
+                <?php endwhile; wp_reset_postdata(); ?>
+
+            </div>
+
 <?php endwhile;
 endif; ?>
 

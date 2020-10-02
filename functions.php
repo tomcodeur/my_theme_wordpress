@@ -243,3 +243,54 @@ add_filter('manage_post_posts_custom_column', function($column, $postId) {
     }
 
 }, 10, 2);
+
+// Ce hook permet d'altérer la requête principale de Wordpress afin d'y ajouter nos propres filtres
+
+/**
+ * @param WP_Query $query
+ */
+function montheme_pre_get_posts ($query) {
+    if (is_admin() || !is_search() || !$query->is_main_query()) {
+        return;
+    }
+    if (get_query_var('sponso') === '1') {
+        $meta_query = $query->get('meta_query', []);
+        $meta_query[] = [
+            'key' => SponsoMetaBox::META_KEY,
+            'compare' => 'EXISTS',
+        ];
+        $query->set('meta_query', $meta_query);
+    }
+}
+
+function montheme_query_vars ($params) {
+    $params[] = 'sponso';
+    return $params;
+}
+
+add_action('pre_get_posts', 'montheme_pre_get_posts');
+add_filter('query_vars', 'montheme_query_vars');
+
+
+// Ajout des widgets
+
+require_once 'widgets/YoutubeWidget.php';
+
+function montheme_register_widget () {
+
+    // Enregistrement de Widget
+
+    register_widget(YouTubeWidget::class);
+
+    register_sidebar([
+        'id' => 'homepage',
+        'name' => 'Sidebar Accueil',
+        'before_widget' => '<div class="p-4 %2$s" id="%1$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h4 class="font-italic">',
+        'after_title' => '</h4>'
+    ]);
+}
+
+
+add_action('widgets_init', 'montheme_register_widget'); 
